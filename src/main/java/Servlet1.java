@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,10 +45,13 @@ public class Servlet1 extends HttpServlet {
         // how to write the response to server
         BufferedReader br = new BufferedReader(new FileReader(new File("1.txt")));
 
+        // should be called BEFORE getting resp.getWriter()
+        resp.setCharacterEncoding(String.valueOf(StandardCharsets.UTF_8));
+
         PrintWriter writer = resp.getWriter();
         String textContent = br.lines().collect(Collectors.joining());
         writer.println();
-        resp.setStatus(404);
+        // resp.setStatus(404);
     }
 
     @Override
