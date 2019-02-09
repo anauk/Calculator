@@ -19,10 +19,10 @@ public class ServletCalculator extends HttpServlet {
         ParameterFromRequest pfr = new ParameterFromRequest(req);
         String responseMessage = "";
         try{
-            int a = pfr.get("a");
-            int b = pfr.get("b");
-            String command = req.getParameter("op");
-            int result=0;
+            int a = pfr.getInt("a");
+            int b = pfr.getInt("b");
+            String command = pfr.getStr("op");
+            int result;
             String operation="";
             switch(command){
                 case "add": result = a+b;

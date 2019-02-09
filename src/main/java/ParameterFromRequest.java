@@ -7,10 +7,14 @@ public class ParameterFromRequest {
         this.req = req;
     }
 
-    public int get(String name) {
+    public int getInt(String name) {
         if(req.getParameter(name) == null){
             throw new IllegalStateException(String.format("Parameter %s missing",name));
         }
         return Integer.parseInt(req.getParameter(name));
+    }
+
+    public String getStr(String name) {
+        return req.getParameter(name);
     }
 }
