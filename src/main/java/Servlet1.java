@@ -23,6 +23,9 @@ public class Servlet1 extends HttpServlet {
 
         // how to access to parameters
         Map<String, String[]> parameterMap = req.getParameterMap();
+        System.out.println(parameterMap);
+
+
         String x = req.getParameter("x");
         String y = req.getParameter("y");
         String op = req.getParameter("op");
@@ -44,6 +47,7 @@ public class Servlet1 extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         String textContent = br.lines().collect(Collectors.joining());
         writer.println();
+        resp.setStatus(404);
     }
 
     @Override
