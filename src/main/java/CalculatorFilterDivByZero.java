@@ -14,13 +14,18 @@ public class CalculatorFilterDivByZero implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;
         ParameterFromRequest pfr = new ParameterFromRequest(req);
-        int b = pfr.getInt("b");
-        String op = pfr.getStr("op");
-        if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod()) || "div".equalsIgnoreCase(op) && b == 0) {
-            response.getWriter().println("You can't divide by zero");
+        if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod())) {
+            int b = pfr.getInt("b");
+            String op = pfr.getStr("op");
+            if ("div".equalsIgnoreCase(op) && b == 0) {
+                response.getWriter().println("You can't divide by zero");
+            } else {
+                chain.doFilter(request, response);
+            }
         } else {
             chain.doFilter(request, response);
         }
+
     }
 
     @Override
