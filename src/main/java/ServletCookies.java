@@ -49,7 +49,7 @@ public class ServletCookies extends HttpServlet {
                 break;
             case "/rm": myCookies.stream()
                     .map((Function<Cookie, Cookie>) c -> new Cookie(c.getName(), c.getValue()) {{ setMaxAge(0);}})
-                    .forEach(c -> resp.addCookie(c));
+                    .forEach(resp::addCookie);
                 break;
         }
     }
