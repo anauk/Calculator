@@ -9,13 +9,6 @@ import java.nio.file.Paths;
 
 public class ServletCalculator extends HttpServlet {
 
-    private int convertParameter(String name, HttpServletRequest req){
-        if(req.getParameter(name) == null){
-            throw new IllegalStateException(String.format("Parameter %s missing",name));
-        }
-        return Integer.parseInt(req.getParameter(name));
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Files.copy(Paths.get("form_calc.html"), resp.getOutputStream());
@@ -23,10 +16,11 @@ public class ServletCalculator extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ParameterFromRequest pfr = new ParameterFromRequest(req);
         String responseMessage = "";
         try{
-            int a = convertParameter("a",req);
-            int b = convertParameter("b",req);
+            int a = pfr.get("a");
+            int b = pfr.get("b");
             String command = req.getParameter("op");
             int result=0;
             String operation="";
