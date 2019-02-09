@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Servlet1 extends HttpServlet {
+public class ServletExamples extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // full URI = getServletPath + getPathInfo
