@@ -1,28 +1,27 @@
-import database.DBConnection;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+
+import database.DbConnection;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseApp {
-    public static void main(String[] args) throws Exception {
-        Connection connection = new DBConnection().connection();
-        String sql = "INSERT INTO history(a,op,b,result) values(?,?,?,?)";
-        PreparedStatement stm = connection.prepareStatement(sql);
-        stm.setInt(1,23);
-        stm.setString(2,"-");
-        stm.setInt(3,11);
-        stm.setInt(4, 12);
+    public static void main1(String[] args) throws SQLException {
+        Connection conn = new DbConnection().connection();
+        //String sql = "INSERT INTO authors (\"firstName\")  VALUES (?)";
+        String sql = "INSERT INTO history (a, op, b, r) VALUES (?, ?, ?, ?)";
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setInt(1, 11);
+        stm.setString(2, "+");
+        stm.setInt(3, 22);
+        stm.setInt(4, 33);
         stm.execute();
-
-       /* ServletContextHandler handler = new ServletContextHandler();
-        handler.addServlet(new ServletHolder(new ServletCalculator()), "/calc/*");
-        Server server = new Server(80);
-        server.setHandler(handler);
-        server.start();
-        server.join();*/
     }
+        public static void main(String[] args) throws SQLException {
+            Connection conn = new DbConnection().connection();
+            String createSQL = "CREATE TABLE IF NOT EXISTS public.users (id SERIAL PRIMARY KEY, name VARCHAR(32))";
+            PreparedStatement stm = conn.prepareStatement(createSQL);
+            stm.execute();
+        }
 }

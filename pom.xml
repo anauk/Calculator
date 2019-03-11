@@ -47,6 +47,9 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.28</version>
         </dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35557742304ec6abef1838e5067e4c5f73492c03
     </dependencies>
 </project>

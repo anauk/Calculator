@@ -12,6 +12,13 @@ import java.util.Map;
 
 public class ServletLogin extends HttpServlet {
 
+    private final UserStorage security;
+
+
+    public ServletLogin(UserStorage security) {
+        this.security = security;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Files.copy(Paths.get("form.html"), resp.getOutputStream());
@@ -21,6 +28,7 @@ public class ServletLogin extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        security.register("user", "passwd");
         System.out.println(req.getParameterMap());
         ParameterFromRequest pfr = new ParameterFromRequest(req);
         String login = pfr.getStr("login");

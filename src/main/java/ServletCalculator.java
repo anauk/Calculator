@@ -10,18 +10,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 
 public class ServletCalculator extends HttpServlet {
-private final Connection conn;
-    public ServletCalculator(Connection connection) {
-        this.conn=connection;
-    }
+    private final UserStorage security;
+    private final Connection conn;
 
-    private int convert(String input, HttpServletRequest request){
-        if(request.getParameter(input) == null){
-            throw new IllegalStateException(String.format("Parametr %s missing", input));
-        }
-        return Integer.parseInt(request.getParameter("a"));
+    public ServletCalculator(UserStorage security, Connection conn) {
+        this.security = security;
+        this.conn = conn;
     }
 
     @Override
@@ -31,6 +29,7 @@ private final Connection conn;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//        boolean checked = security.check("user", "passwd");
         ParameterFromRequest pfr = new ParameterFromRequest(req);
         int a = pfr.getInt("a");
         int b = pfr.getInt("b");
@@ -55,21 +54,23 @@ private final Connection conn;
                 operation = "/";
                 break;
         }
-        saveOperationToDB(a,command,b,result);
+        saveOperationToDb(a,command,b,result);
         resp.getWriter().printf("%d %s %d = %d", a, operation, b, result);
     }
-    private void saveOperationToDB(int a, String op, int b, int result){
+
+
+    private void saveOperationToDb(int a, String operation, int b, int result) {
         try {
-            String sql = "INSERT INTO history(a,op,b,result) values(?,?,?,?)";
+            String sql = "INSERT INTO history1 (a, op, b, r) VALUES (?, ?, ?, ?)";
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, a);
-            stm.setString(2, op);
+            stm.setString(2, operation);
             stm.setInt(3, b);
             stm.setInt(4, result);
             stm.execute();
-        }catch (Exception e){
-            e.printStackTrace();
-            //System.out.println("Error");
+        } catch (SQLException e) {
+            new IllegalStateException("Smth went wrong", e);
+
         }
     }
 }
