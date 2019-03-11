@@ -1,6 +1,7 @@
-package servlets;
+package filter;
 
 import org.eclipse.jetty.http.HttpMethod;
+import utils.ParameterFromRequest;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

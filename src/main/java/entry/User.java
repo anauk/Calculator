@@ -1,5 +1,7 @@
-package servlets;
+package entry;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -8,6 +10,7 @@ public class User {
     private String login;
     private String password;
     private int id;
+    private List<String> history = new ArrayList<>();
     public User(){
 
     }
@@ -21,18 +24,7 @@ public class User {
         this.surname = surname;
         this.login = login;
         this.password = password;
-        this.id = Math.abs(Objects.hash(name, surname, login, password));
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", id=" + id +
-                '}';
+        this.id = login.hashCode();
     }
 
     public void setName(String name) {
@@ -74,4 +66,38 @@ public class User {
     public int getId() {
         return id;
     }
+
+    public boolean check(String password) {
+        return password.equals(this.password);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
+    public List<String> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<String> history) {
+        this.history = history;
+    }
+    public void addResultToHistory(String string){
+        history.add(string);
+    }
+    public String printHistory(){
+        StringBuilder sb = new StringBuilder();
+        for (String h:history){
+            sb.append(h + "<br>");
+        }
+        return sb.toString();
+    }
+
 }

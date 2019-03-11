@@ -1,5 +1,11 @@
 package servlets;
 
+import com.sun.deploy.net.cookie.CookieUnavailableException;
+import utils.CookieProcessor;
+import entry.User;
+import entry.UserService;
+import utils.ParameterFromRequest;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +16,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class CalculatorServlet extends HttpServlet {
+    private UserService us;
+    private CookieProcessor cp;
+
+    public CalculatorServlet(UserService us, CookieProcessor cp) {
+        this.us = us;
+        this.cp = cp;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Files.copy(Paths.get("form_calc.html"), resp.getOutputStream());
@@ -38,7 +52,17 @@ public class CalculatorServlet extends HttpServlet {
             operation = "/";
             break;
         }
-        PrintWriter writer = resp.getWriter();
-        writer.printf("%d %s %d = %d", a, operation, b, result);
+        try {
+            User user = us.getUser(Integer.parseInt(cp.getValue(req)));
+            String history = String.format("%d %s %d = %d\n", a, op, b, result);
+            user.addResultToHistory(history);
+            PrintWriter writer = resp.getWriter();
+            writer.printf("%d %s %d = %d:\n history-%s\n", a, operation, b, result, user.getHistory());
+
+        } catch (CookieUnavailableException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

@@ -1,4 +1,7 @@
+package filter;
+
 import org.eclipse.jetty.http.HttpMethod;
+import utils.ParameterFromRequest;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +21,7 @@ public class CalculatorFilterDivByZero implements Filter {
             int b = pfr.getInt("b");
             String op = pfr.getStr("op");
             if ("div".equalsIgnoreCase(op) && b == 0) {
-                response.getWriter().println("You can't divide by zero");
+                response.getWriter().println("<html> <a href=\"/calc\"> You can't divide by zero </a></html>");
             } else {
                 chain.doFilter(request, response);
             }

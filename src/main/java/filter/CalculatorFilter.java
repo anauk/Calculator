@@ -1,16 +1,22 @@
-package servlets;
-
-import org.eclipse.jetty.http.HttpMethod;
+package filter;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class FilterLogin implements Filter {
+import org.eclipse.jetty.http.HttpMethod;
+import utils.ParameterFromRequest;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+public class CalculatorFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+
     }
+
     @Override
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req;
         if (request instanceof HttpServletRequest) {
@@ -18,19 +24,19 @@ public class FilterLogin implements Filter {
         } else {
             throw new IllegalArgumentException("ServletRequest should be instance of HttpServletRequest");
         }
-        if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod())){
-            ParameterFromRequest pfr = new ParameterFromRequest(req);
-            String login = pfr.getStr("login");
-            String password = pfr.getStr("password");
-            if(login.equals("asda")) {
+
+        if (HttpMethod.POST.name().equalsIgnoreCase(req.getMethod())) {
+            try {
+                ParameterFromRequest pfr = new ParameterFromRequest(req);
+                int a = pfr.getInt("a");
+                int b = pfr.getInt("b");
+                String command = pfr.getStr("op");
                 chain.doFilter(request, response);
-            } else {
-                System.out.println(UsersList.getInstance().list());
-                response.getWriter().print("<html><p>Your login or password wrong!<p><a href='/login'>Authorization</a></html>");
+            } catch (Exception e) {
+                response.getWriter().println("<html> <a href=\"/calc\"> All fields must be full </a></html>");
             }
         } else {
             chain.doFilter(request, response);
-
         }
     }
 
@@ -38,4 +44,5 @@ public class FilterLogin implements Filter {
     public void destroy() {
 
     }
+
 }
